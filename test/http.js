@@ -161,6 +161,17 @@ describe('http', () => {
     )
   })
 
+  it('should return a proper error for failed fetch', () => {
+    return http({
+      url: 'http://localhost:1/'      // XXX how do I mock that connection refused result?
+    })
+    .catch((err) => {
+      expect(err.name).toEqual('FetchError')
+      expect(err.message).toMatch(/\breason: connect ECONNREFUSED\b/)
+      expect(err.errno).toEqual('ECONNREFUSED')   // FetchError specific
+    })
+  })
+
   describe('serializeHeaders', function () {
     it('should handle FetchAPI Headers object, which is iterable', function () {
       // Given
